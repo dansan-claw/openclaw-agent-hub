@@ -173,11 +173,17 @@ class OpenClawAgent:
         
         print(f"📨 Received from {sender}: {content}")
         
-        # Generate response
-        response = self.message_handler(data)
+        # Only respond when explicitly mentioned (@AgentName) or DM
+        # This prevents infinite response loops
+        is_mentioned = f"@{self.name}" in content or f"@{self.name.lower()}" in content.lower()
+        is_direct_message = data.get("message_type") == "dm" or data.get("metadata", {}).get("direct", False)
         
-        if response:
-            await self.send_message(response)
+        if is_mentioned or is_direct_message:
+            # Generate response
+            response = self.message_handler(data)
+            
+            if response:
+                await self.send_message(response)
     
     async def run(self):
         """Main run loop - connect and listen"""
