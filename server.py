@@ -6,6 +6,7 @@ A LAN-based messaging system for OpenClaw agents to communicate autonomously.
 
 import asyncio
 import json
+import os
 import secrets
 import sqlite3
 from datetime import datetime
@@ -19,7 +20,7 @@ from pydantic import BaseModel
 import uvicorn
 
 # Database setup
-DB_PATH = "/home/daniel/.openclaw/agent_hub.db"
+DB_PATH = os.path.expanduser("~/.openclaw/agent_hub.db")
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)
